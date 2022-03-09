@@ -15,11 +15,7 @@ end
 
 def to_table(filenames, column_count: DEFAULT_COLUMN_COUNT)
   filenames << nil until filenames.length.modulo(column_count).zero?
-  table = []
-  filenames.each_slice(column_count) do |slice|
-    table << slice
-  end
-  table
+  filenames.each_slice(column_count).to_a
 end
 
 def convert_table_into_lines(table)
