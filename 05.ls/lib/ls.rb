@@ -6,8 +6,7 @@ require 'pathname'
 DEFAULT_COLUMN_COUNT = 3
 
 def main
-  target_path = ARGV[0] ? Pathname.new(ARGV[0]) : Pathname.getwd
-  filenames = target_path.glob('*').map { |item| item.basename.to_s }
+  filenames = Dir.glob('*', base: ARGV[0])
   table = to_table(filenames)
   lines = convert_table_into_lines(table)
   puts lines
