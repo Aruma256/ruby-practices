@@ -9,7 +9,7 @@ DEFAULT_COLUMN_COUNT = 3
 def main
   glob_flags = 0
   opt = OptionParser.new
-  opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
+  # opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
   opt.parse!(ARGV)
   filenames = Dir.glob('*', glob_flags, base: ARGV[0])
   table = to_table(filenames)
