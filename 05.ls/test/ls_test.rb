@@ -13,6 +13,7 @@ class LsTest < Minitest::Test
     assert_equal [%w[aa bb cc], %w[dd ee ff]], to_table(%w[aa bb cc dd ee ff], column_count: 3)
     assert_equal [%w[aa bb cc], %w[dd ee ff], ['gg', nil, nil]], to_table(%w[aa bb cc dd ee ff gg], column_count: 3)
     assert_equal [%w[. .conf a]], to_table(%w[. .conf a], column_count: 3)
+    assert_equal [%w[ff ee dd], %w[cc bb aa]], to_table(%w[ff ee dd cc bb aa], column_count: 3)
   end
 
   def test_format_table_empty
@@ -91,6 +92,16 @@ class LsTest < Minitest::Test
       '.       .zzz',
       '.config aaa',
       '.hidden b'
+    ]
+    assert_equal expected, convert_table_into_lines(input)
+  end
+
+  def test_format_table_3_elements_reversed
+    input = [%w[c b a]]
+    expected = %w[
+      c
+      b
+      a
     ]
     assert_equal expected, convert_table_into_lines(input)
   end
