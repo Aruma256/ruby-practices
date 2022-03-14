@@ -12,6 +12,7 @@ class LsTest < Minitest::Test
     assert_equal [%w[aa bb], %w[cc dd], %w[ee ff]], to_table(%w[aa bb cc dd ee ff], column_count: 2)
     assert_equal [%w[aa bb cc], %w[dd ee ff]], to_table(%w[aa bb cc dd ee ff], column_count: 3)
     assert_equal [%w[aa bb cc], %w[dd ee ff], ['gg', nil, nil]], to_table(%w[aa bb cc dd ee ff gg], column_count: 3)
+    assert_equal [%w[. .conf a]], to_table(%w[. .conf a], column_count: 3)
   end
 
   def test_format_table_empty
@@ -77,6 +78,19 @@ class LsTest < Minitest::Test
       'b f j n',
       'c g k o',
       'd h l p'
+    ]
+    assert_equal expected, convert_table_into_lines(input)
+  end
+
+  def test_format_table_start_with_dot
+    input = [
+      %w[. .config .hidden],
+      %w[.zzz aaa b]
+    ]
+    expected = [
+      '.       .zzz',
+      '.config aaa',
+      '.hidden b'
     ]
     assert_equal expected, convert_table_into_lines(input)
   end

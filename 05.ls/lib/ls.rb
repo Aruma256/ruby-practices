@@ -1,13 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
 require 'pathname'
 
 DEFAULT_COLUMN_COUNT = 3
 
 def main
-  target_path = ARGV[0] ? Pathname.new(ARGV[0]) : Pathname.getwd
-  filenames = target_path.glob('*').map { |item| item.basename.to_s }
+  glob_flags = 0
+  opt = OptionParser.new
+  opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
+  opt.parse!(ARGV)
+  filenames = Dir.glob('*', glob_flags, base: ARGV[0])
   table = to_table(filenames)
   lines = convert_table_into_lines(table)
   puts lines
