@@ -13,7 +13,7 @@ def main
   # opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
   # opt.on('-r') { params[:r] = true }
   opt.parse!(ARGV)
-  filenames = Dir.glob('*', glob_flags, base: ARGV[0])
+  filenames = Dir.glob('*', glob_flags)
   filenames.reverse! if params[:r]
   table = to_table(filenames)
   lines = convert_table_into_lines(table)
