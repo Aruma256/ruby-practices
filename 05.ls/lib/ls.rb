@@ -19,7 +19,7 @@ def main
   filenames = Dir.glob('*', glob_flags)
   filenames.reverse! if params[:r]
   if params[:l]
-    total_blocks = filenames.map { |filename| File::Stat.new(filename).blocks }.sum
+    total_blocks = filenames.sum { |filename| File::Stat.new(filename).blocks }
     puts "total #{total_blocks}"
     table = to_long_table(filenames)
   else
