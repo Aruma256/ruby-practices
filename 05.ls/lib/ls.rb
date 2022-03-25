@@ -48,22 +48,17 @@ def to_long_table(filenames)
 end
 
 def to_permission_string(stat)
-  res = +''
-  res << if stat.directory?
+  type = if stat.directory?
            'd'
          elsif stat.symlink?
            'l'
          else
            '-'
          end
-  (-9..-1).each do |pos|
-    res << if (stat.mode & (1 << (pos.abs - 1))).nonzero?
-             PERMISSION_STRING[pos]
-           else
-             '-'
-           end
+  permissions = (-9..-1).map do |pos|
+    (stat.mode & (1 << (pos.abs - 1))).nonzero? ? PERMISSION_STRING[pos] : '-'
   end
-  res
+  type + permissions.join
 end
 
 def to_table(filenames, column_count: DEFAULT_COLUMN_COUNT)
