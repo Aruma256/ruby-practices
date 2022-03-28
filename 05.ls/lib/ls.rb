@@ -12,8 +12,8 @@ def main
   glob_flags = 0
   params = {}
   opt = OptionParser.new
-  # opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
-  # opt.on('-r') { params[:r] = true }
+  opt.on('-a') { glob_flags |= File::FNM_DOTMATCH }
+  opt.on('-r') { params[:r] = true }
   opt.on('-l') { params[:l] = true }
   opt.parse!(ARGV)
   filenames = Dir.glob('*', glob_flags)
