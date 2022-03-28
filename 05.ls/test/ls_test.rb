@@ -5,6 +5,31 @@ require 'minitest/autorun'
 require_relative '../lib/ls'
 
 class LsTest < Minitest::Test
+  class DummyStat
+    attr_reader :mode
+
+    def initialize(type, mode)
+      @type = type
+      @mode = mode
+    end
+
+    def directory?
+      @type == 'd'
+    end
+
+    def symlink?
+      @type == 'l'
+    end
+  end
+
+  def test_to_permission_string
+    assert_equal '-rwxrwxrwx', to_permission_string(DummyStat.new('-', 0o777))
+    assert_equal '-r---wx-w-', to_permission_string(DummyStat.new('-', 0o432))
+    assert_equal '--w---x---', to_permission_string(DummyStat.new('-', 0o210))
+    assert_equal 'drwxr-xr-x', to_permission_string(DummyStat.new('d', 0o755))
+    assert_equal 'lrwxr-xr-x', to_permission_string(DummyStat.new('l', 0o755))
+  end
+
   def test_to_table
     assert_equal [], to_table([])
     assert_equal [['test']], to_table(['test'], column_count: 1)
