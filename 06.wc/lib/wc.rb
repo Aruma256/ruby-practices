@@ -11,14 +11,14 @@ def main
   opt.on('-l') { params[:l] = true }
   opt.parse!(ARGV)
   results = if ARGV.empty?
-              [[stat($stdin.read), nil]]
+              [{ stat: stat($stdin.read) }]
             else
-              ARGV.map { |path| [stat(IO.read(path)), path] }
+              ARGV.map { |path| { stat: stat(IO.read(path)), path: path } }
             end
   totals = Hash.new(0)
-  results.each do |stat, name|
-    stat.each { |key, value| totals[key] += value }
-    puts to_formatted_string(stat, name: name, only_lines: params[:l])
+  results.each do |result|
+    result[:stat].each { |key, value| totals[key] += value }
+    puts to_formatted_string(result[:stat], name: result[:path], only_lines: params[:l])
   end
   puts to_formatted_string(totals, name: 'total', only_lines: params[:l]) if results.length > 1
 end
