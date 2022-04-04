@@ -15,12 +15,7 @@ def main
             else
               ARGV.map { |path| { stat: stat(IO.read(path)), path: path } }
             end
-  totals = Hash.new(0)
-  results.each do |result|
-    result[:stat].each { |key, value| totals[key] += value }
-    puts to_formatted_string(result[:stat], name: result[:path], only_lines: params[:l])
-  end
-  puts to_formatted_string(totals, name: 'total', only_lines: params[:l]) if results.length > 1
+  print_results(results, only_lines: params[:l])
 end
 
 def stat(content)
@@ -29,6 +24,15 @@ def stat(content)
     words: content.split.length,
     bytes: content.length
   }
+end
+
+def print_results(results, only_lines: false)
+  totals = Hash.new(0)
+  results.each do |result|
+    result[:stat].each { |key, value| totals[key] += value }
+    puts to_formatted_string(result[:stat], name: result[:path], only_lines: only_lines)
+  end
+  puts to_formatted_string(totals, name: 'total', only_lines: only_lines) if results.length > 1
 end
 
 def to_formatted_string(stat, name: nil, only_lines: false)
