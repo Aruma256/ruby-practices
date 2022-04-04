@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'optparse'
-require 'pathname'
 
 NUMBER_OUTPUT_DIGITS = 8
 
@@ -11,12 +10,11 @@ def main
   opt = OptionParser.new
   opt.on('-l') { params[:l] = true }
   opt.parse!(ARGV)
-  if ARGV.empty?
-    results = [[stat($stdin.read)]]
-  else
-    pathnames = ARGV.map { |path| Pathname(path) }
-    results = pathnames.map { |pathname| [stat(pathname.read), pathname.to_s] }
-  end
+  results = if ARGV.empty?
+              [[stat($stdin.read), nil]]
+            else
+              ARGV.map { |path| [stat(IO.read(path)), path] }
+            end
   totals = Hash.new(0)
   results.each do |stat, name|
     stat.each { |key, value| totals[key] += value }
